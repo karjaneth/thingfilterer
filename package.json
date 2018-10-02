@@ -6,6 +6,32 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
+    "private": true,
+    "eslintConfig": {
+        "extends": "eslint:recommended",
+        "env": {
+            "node": true,
+            "es6": true,
+            "browser": true
+        },
+        "rules": {
+            "semi": "warn",
+            "strict": [
+                "warn",
+                "global"
+            ],
+            "no-unused-vars": [
+                "warn",
+                {
+                    "args": "none"
+                }
+            ],
+            "no-console": "off"
+        },
+        "parserOptions": {
+            "ecmaVersion": 8
+        }
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/karjaneth/thingfilterer.git"
