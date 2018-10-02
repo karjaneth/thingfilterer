@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/karjaneth/thingfilterer/issues"
   },
-  "homepage": "https://github.com/karjaneth/thingfilterer#readme"
+  "homepage": "https://github.com/karjaneth/thingfilterer#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.3"
+  }
 }
