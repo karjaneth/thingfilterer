@@ -1,23 +1,23 @@
 {
-  "name": "thingfilterer",
-  "version": "1.0.0",
-  "description": "A Web Application for Filtering Things",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/karjaneth/thingfilterer.git"
-  },
-  "author": "Kerrigan Joseph",
-  "license": "Unlicense",
-  "bugs": {
-    "url": "https://github.com/karjaneth/thingfilterer/issues"
-  },
-  "homepage": "https://github.com/karjaneth/thingfilterer#readme",
-  "dependencies": {
-    "axios": "^0.18.0",
-    "express": "^4.16.3"
-  }
+    "name": "thingfilterer",
+    "version": "1.0.0",
+    "description": "A Web Application for Filtering Things",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/karjaneth/thingfilterer.git"
+    },
+    "author": "Kerrigan Joseph",
+    "license": "Unlicense",
+    "bugs": {
+        "url": "https://github.com/karjaneth/thingfilterer/issues"
+    },
+    "homepage": "https://github.com/karjaneth/thingfilterer#readme",
+    "dependencies": {
+        "axios": "^0.18.0",
+        "express": "^4.16.3"
+    }
 }
