@@ -53,8 +53,9 @@
 
     <body>
         <div id="app">
-            <!-- two-way bind this input to the "query" property -->
-            <input v-model="query" placeholder="Type to filter countries..."/>
+            <!-- the `v-bind`/`v-on` combo *should* be identical to
+            `v-model="query"`, but the latter didn't work on mobile-->
+            <input v-bind:value="query" v-on:input="query = $event.target.value" placeholder="Type to filter..."/>
             <div id="countries">
                 <!-- clicking a country name marks it as the "selection" -->
                 <div v-for="c in countries" v-on:click="selection = c.code">{{ c.name }}</div>
