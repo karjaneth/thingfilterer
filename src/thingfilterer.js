@@ -9,7 +9,7 @@ class ThingFilterer {
     constructor(config) {
         this.app = express();
 
-        this.app.use('/', this.index.bind(this));
+        this.app.get('/', this.index.bind(this));
         this.app.get('/filter/', this.filter.bind(this));
         this.app.get('/details/:code', this.details.bind(this));
     }
@@ -22,6 +22,13 @@ class ThingFilterer {
     async filter(req, res) {
         // TODO error handling
 
+        // an empty query should match nothing???
+        if (!req.query.q) {
+            res.json([]);
+            return;
+        }
+
+        // TODO maybe just a simple text inside search instead of regex
         // convert their search string to regex
         let query = new RegExp(req.query.q.toLowerCase());
 
