@@ -5,9 +5,15 @@
 
         <title>Countries of the World</title>
 
+        <!-- jquery makes life easier -->
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+        <!-- lodash for api call throttling -->
         <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js" integrity="sha256-7/yoZS3548fXSRXqc/xYzjsmuW3sFKzuvOCHd06Pmps=" crossorigin="anonymous"></script>
+
+        <!-- vue.js for state management -->
         <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
         <script>
             'use strict';
 
@@ -31,23 +37,59 @@
                         countries: undefined,
                         selection: undefined,
                         details: undefined,
+                        error: undefined,
                     },
 
                     // dynamically update our data based on certain bound values
                     watch: {
                         // limit filter API call to once every 1/4 second
                         query: _.throttle(async function(q) {
-                            this.countries = await get('/filter', { q });
+                            // call our filter endpoint
+                            let response = await get('/filter', { q });
+
+                            // process the response
+                            if (response.error) {
+                                // if we got an error, log and display it
+                                console.error(`Error: ${response.error}`);
+                                this.error = [
+                                    'There was an error getting results from the server.',
+                                    'Please try again or contact the maintainer.',
+                                ].join('<br />');
+                            } else {
+                                // if no error, blank it and update our countries
+                                this.error = undefined;
+                                this.countries = response.results;
+                            }
                         }, 250),
 
                         selection: async function(s) {
+                            // fill the query field with whatever name they clicked
                             this.query = s.name;
+
+                            // call our details endpoint
+                            let response = await get(`/details/${s.code}`);
+
+                            // process the response
+                            if (response.error) {
+                                // if we got an error, log and display it
+                                console.error(`Error: ${response.error}`);
+                                this.error = [
+                                    'There was an error getting details from the server.',
+                                    'Please try again or contact the maintainer.',
+                                ].join('<br />');
+                            } else {
+                                // if no error, blank it and update our details
+                                this.error = undefined;
+                                this.details = response.details;
+                            }
+
+                            // focus on the query field
                             $('#query').focus();
-                            this.details = await get(`/details/${s.code}`);
                         },
                     },
                 });
 
+                // page should begin with input focused on the query field
                 $('#query').focus();
             }
 
@@ -55,6 +97,7 @@
             $(init);
         </script>
 
+        <!-- using bootstrap for its normalization and good typography defaults -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
         <style>
             /* center everything in the body */
@@ -84,7 +127,14 @@
             #header {
                 text-align: center;
                 margin-top: 40px;
-                margin-bottom: 30px;
+                margin-bottom: 20px;
+            }
+
+            #error {
+                text-align: center;
+                font-variant: small-caps;
+                font-size: larger;
+                margin-bottom: 10px;
             }
 
             /* prettify the input box */
@@ -155,6 +205,8 @@
         <div id="app">
             <h1 id="header">Countries of the World</h1>
 
+            <div id="error" v-html="error"></div>
+
             <!-- the `v-bind`/`v-on` combo *should* be identical to
             `v-model="query"`, but the latter didn't work on mobile -->
             <input id="query" spellcheck="false" v-bind:value="query" v-on:input="query = $event.target.value" placeholder="Start typing to filter..."/>
@@ -172,13 +224,13 @@
         <!-- cite our content sources -->
         <div id="attributions">
             <!-- the map background image came from wikimedia commons -->
-            <a href="https://commons.wikimedia.org/wiki/File:World_map_(Miller_cylindrical_projection,_blank).svg">Background Image</a>
-            by <a href="https://commons.wikimedia.org/wiki/User:Felipe_Menegaz">Felipe Menegaz</a>
-            distributed under <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA-3.0</a><br />
+            <a target="_blank" href="https://commons.wikimedia.org/wiki/File:World_map_(Miller_cylindrical_projection,_blank).svg">Background Image</a>
+            by <a target="_blank" href="https://commons.wikimedia.org/wiki/User:Felipe_Menegaz">Felipe Menegaz</a>
+            distributed under <a target="_blank" href="http://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA-3.0</a><br />
 
             <!-- country data came from the geonames open api -->
-            Country Data sourced from <a href="http://www.geonames.org/export/web-services.html#countryInfo">GeoNames</a>
-            distributed under <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a>
+            Country Data sourced from <a target="_blank" href="http://www.geonames.org/export/web-services.html#countryInfo">GeoNames</a>
+            distributed under <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a>
         </div>
     </body>
 </html>
