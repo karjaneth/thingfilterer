@@ -1,19 +1,10 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" data-emoji="🌎" type="image/png" />
+        <script src="emoji_favicon.js"></script>
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <style>
-            #app {
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-start;
-            }
-
-            #app > * {
-                flex: 0 0 auto;
-            }
-        </style>
+        <title>Countries of the World</title>
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js" integrity="sha256-7/yoZS3548fXSRXqc/xYzjsmuW3sFKzuvOCHd06Pmps=" crossorigin="anonymous"></script>
@@ -57,20 +48,39 @@
 
             $(init);
         </script>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+        <style>
+            /* flex-ify our wrapper element */
+            #app {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+            }
+
+            /* flex-ify all direct children of wrapper */
+            #app > * {
+                flex: 0 0 auto;
+            }
+
+            .query {
+                font-size: large;
+
+            }
+        </style>
     </head>
 
     <body>
         <div id="app">
             <h1>Countries of the World</h1>
-            <p>Start typing the name of a country below...</p>
+            <h3>Start typing the name of a country below...</h3>
 
             <!-- the `v-bind`/`v-on` combo *should* be identical to
             `v-model="query"`, but the latter didn't work on mobile-->
-            <input v-bind:value="query" v-on:input="query = $event.target.value" placeholder="Type to filter..."/>
-            <div id="countries">
-                <!-- clicking a country name marks it as the "selection" -->
-                <div v-for="c in countries" v-on:click="selection = c.code">{{ c.name }}</div>
-            </div>
+            <input class="query" v-bind:value="query" v-on:input="query = $event.target.value" placeholder="Type to filter..."/>
+
+            <!-- clicking a country name marks it as the "selection" -->
+            <div class="country" v-for="c in countries" v-on:click="selection = c.code">{{ c.name }}</div>
         </div>
     </body>
 </html>
