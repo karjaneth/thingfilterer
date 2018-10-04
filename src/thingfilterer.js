@@ -9,7 +9,7 @@ class ThingFilterer {
     constructor(config) {
         this.app = express();
 
-        this.app.get('/', this.index.bind(this));
+        this.app.use('/', express.static(`${__dirname}/static/`));
         this.app.get('/filter/', this.filter.bind(this));
         this.app.get('/details/:code', this.details.bind(this));
     }
