@@ -13,7 +13,7 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
-    padding: 0px 25px;
+    padding: 0px 40px;
     width: 700px;
     overflow: hidden;
 }
@@ -30,6 +30,18 @@ body {
     text-align: center;
     margin-top: 40px;
     margin-bottom: 20px;
+}
+
+@media screen and (max-width: 500px) {
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (max-width: 410px) {
+    h1 {
+        font-size: 1.5rem;
+    }
 }
 
 #error {
@@ -59,18 +71,41 @@ body {
 
 .country {
     font-size: x-large;
-    padding: 5px 10px;
+    padding: 0px;
     border: 1px solid black;
     margin-bottom: -1px;
     cursor: pointer;
     background-color: rgb(255, 255, 255, 0.5);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.country>* {
+    margin: 0px 5px;
 }
 
 .country:hover {
     background-color: #DDD;
 }
 
-/* kinda ugly way to get our background to look right */
+/* format the details container */
+
+#details {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#details>* {
+    margin: 0px 10px;
+}
+
+#details>img {
+    zoom: 2;
+}
+
+/* kinda ugly way to get the background to look right */
 
 #bg {
     position: fixed;

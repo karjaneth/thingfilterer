@@ -2,6 +2,8 @@
 
 const express = require('express');
 const axios = require('axios');
+const langs = require('./langs');
+const currency = require('./currency');
 
 
 // a method to strip diacritic marks for more consistent string comparison
@@ -123,9 +125,26 @@ class ThingFilterer {
             // pull off the actual country data
             this._countries = data.geonames;
 
-            // add flag image url, for fun!
             this._countries.forEach(c => {
+                // add flag image url, for fun!
                 c.flag = `https://www.countryflags.io/${c.countryCode}/flat/64.png`;
+
+                // add colloquial language name
+                c.languageNames = c.languages
+                    .split(',')
+                    .filter(l => l.includes('-'))
+                    .map(l => langs[l.split('-')[0]] ||
+                        `A language whose ISO code is '${l}'`);
+
+                let last = c.languageNames.pop();
+                let first = c.languageNames.length > 0 ?
+                    c.languageNames.join(', ') + ' and ' :
+                    '';
+                c.languageNames = `${first}${last}`;
+
+                // add currency name
+                c.currencyName = currency[c.currencyCode] ||
+                    `A currency whose code is '${c.currencyCode}'`;
             });
         }
 

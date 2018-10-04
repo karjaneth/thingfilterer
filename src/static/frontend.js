@@ -24,6 +24,19 @@ async function init() {
             error: undefined,
         },
 
+        computed: {
+            has_selection: {
+                get: function() {
+                    return this.selection !== undefined;
+                },
+                set: function(val) {
+                    if (!val) {
+                        this.selection = undefined;
+                    }
+                }
+            }
+        },
+
         // dynamically update our data based on certain bound values
         watch: {
             // limit filter API call to once every 1/4 second
@@ -47,6 +60,12 @@ async function init() {
             }, 250),
 
             selection: async function(s) {
+                // if selection is killed, kill details too
+                if (!s) {
+                    this.details = undefined;
+                    return;
+                }
+
                 // fill the query field with whatever name they clicked
                 this.query = s.name;
 
@@ -69,6 +88,15 @@ async function init() {
 
                 // focus on the query field
                 $('#query').focus();
+            },
+        },
+
+        methods: {
+            number(n) {
+                return Number(n)
+                    .toLocaleString('en-US', {
+                        maximumFractionDigits: 0,
+                    });
             },
         },
     });
