@@ -1,8 +1,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" data-emoji="🌎" type="image/png" />
-        <script src="emoji_favicon.js"></script>
+        <link rel="icon" href="favicon.png" type="image/png" />
 
         <title>Countries of the World</title>
 
@@ -21,7 +20,9 @@
             });
 
             async function init() {
+                // using vue.js to manage state
                 window.app = new Vue({
+                    // tell vue which element to care about
                     el: '#app',
 
                     // define data up front so Vue knows about it
@@ -40,55 +41,144 @@
                         }, 250),
 
                         selection: async function(s) {
-                            this.details = await get(`/details/${s}`);
+                            this.query = s.name;
+                            $('#query').focus();
+                            this.details = await get(`/details/${s.code}`);
                         },
                     },
                 });
+
+                $('#query').focus();
             }
 
+            // run our init function on when the DOM is ready
             $(init);
         </script>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
         <style>
-            /* flex-ify our wrapper element */
+            /* center everything in the body */
+            body {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            /* flexify our wrapper element */
             #app {
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-start;
+                align-items: stretch;
+                padding: 0px 25px;
+                width: 700px;
+                overflow: hidden;
             }
 
-            /* flex-ify all direct children of wrapper */
+            /* flexify all direct children of wrapper */
             #app > * {
                 flex: 0 0 auto;
             }
 
-            .query {
-                font-size: large;
+            /* prettify the header text */
+            #header {
+                text-align: center;
+                margin-top: 40px;
+                margin-bottom: 30px;
+            }
 
+            /* prettify the input box */
+            #query {
+                font-size: large;
+                padding: 10px 10px;
+                margin-bottom: 5px;
+                border: 1px solid black;
+            }
+
+            /* scroll within the country wrapper div */
+            #countries {
+                overflow: overlay;
+                flex: 1;
+            }
+
+            /* prettify the country name elements */
+            .country {
+                font-size: x-large;
+                padding: 5px 10px;
+                border: 1px solid black;
+                margin-bottom: -1px;
+                cursor: pointer;
+                background-color: rgb(255, 255, 255, 0.5);
+            }
+            .country:hover {
+                background-color: #DDD;
+            }
+
+
+            /* kinda ugly way to get our background to look right */
+            #bg {
+                position: fixed;
+                top: 0px;
+                bottom: 0px;
+                height: 100vh;
+                width: 100vw;
+                min-height: 800px;
+                z-index: -100;
+                opacity: 0.4;
+
+                /* more readable than the combined background property */
+                background-image: url(background.svg);
+                background-size: cover;
+                background-origin: border-box;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
+
+            /* stick the license footer to the bottom */
+            #attributions {
+                position: fixed;
+                bottom: 0px;
+                text-align: center;
+                font-size: smaller;
+                color: #DDD;
+            }
+            #attributions > a {
+                color: inherit;
+                text-decoration: underline;
             }
         </style>
     </head>
 
     <body>
+        <!-- the actual content -->
         <div id="app">
-            <h1>Countries of the World</h1>
-            <h3>Start typing the name of a country below...</h3>
+            <h1 id="header">Countries of the World</h1>
 
             <!-- the `v-bind`/`v-on` combo *should* be identical to
-            `v-model="query"`, but the latter didn't work on mobile-->
-            <input class="query" v-bind:value="query" v-on:input="query = $event.target.value" placeholder="Type to filter..."/>
+            `v-model="query"`, but the latter didn't work on mobile -->
+            <input id="query" spellcheck="false" v-bind:value="query" v-on:input="query = $event.target.value" placeholder="Start typing to filter..."/>
 
-            <!-- clicking a country name marks it as the "selection" -->
-            <div class="country" v-for="c in countries" v-on:click="selection = c.code">{{ c.name }}</div>
+            <div id="countries">
+                <!-- clicking a country name marks it as the "selection" -->
+                <div class="country" v-for="c in countries" v-on:click="selection = c"><img :src="c.flag" /> {{ c.name }}</div>
+            </div>
+        </div>
+
+
+        <!-- background image -->
+        <div id="bg"></div>
+
+        <!-- cite our content sources -->
+        <div id="attributions">
+            <!-- the map background image came from wikimedia commons -->
+            <a href="https://commons.wikimedia.org/wiki/File:World_map_(Miller_cylindrical_projection,_blank).svg">Background Image</a>
+            by <a href="https://commons.wikimedia.org/wiki/User:Felipe_Menegaz">Felipe Menegaz</a>
+            distributed under <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA-3.0</a><br />
+
+            <!-- country data came from the geonames open api -->
+            Country Data sourced from <a href="http://www.geonames.org/export/web-services.html#countryInfo">GeoNames</a>
+            distributed under <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a>
         </div>
     </body>
 </html>
-
-<!-- plan
-
-as they type into the query input, it will debounce (maybe every 500 ms?) and
-query the api for results. those results will be updated on the vue object, and
-the page will display the results (maybe up to 10 or so at a time).
-
--->

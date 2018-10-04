@@ -1,30 +1,34 @@
 'use strict';
 
-// const _ = require('lodash');
 const express = require('express');
 const fake_data = require('./fakedata'); // HACK
+
+
+// a method to strip diacritic marks for more consistent string comparison
+function sanitize(s) {
+    return s
+        .normalize('NFD') // decompose combined graphemes to separate parts
+        .replace(/[\u0300-\u036f]/g, "") // strip unicode diacritics
+        .toLocaleLowerCase('en-US'); // lowercase with locale awareness
+}
 
 
 class ThingFilterer {
     constructor(config) {
         this.app = express();
 
+        // set up routes
         this.app.use('/', express.static(`${__dirname}/static/`));
         this.app.get('/filter/', this.filter.bind(this));
         this.app.get('/details/:code', this.details.bind(this));
     }
 
-    // our static html file with client-side javascript
-    index(req, res) {
-        res.sendFile(`${__dirname}/index.html`);
-    }
-
     // takes a search string and returns a list of
-    // matches (full name and country code)
+    // matches (full name, country code, and flag url)
     async filter(req, res) {
         // TODO error handling
 
-        // an empty query should match nothing
+        // optimize: an empty query should match nothing
         if (!req.query.q) {
             res.json([]);
             return;
@@ -36,10 +40,11 @@ class ThingFilterer {
             .map(c => ({
                 name: c.countryName,
                 code: c.countryCode,
+                flag: c.flag,
             }))
 
             // just keep those whose name includes the search string
-            .filter(c => c.name.toLowerCase().includes(req.query.q.toLowerCase()))
+            .filter(c => sanitize(c.name).includes(sanitize(req.query.q)))
 
             // sort alphabetically by name
             .sort((a, b) => a.name.localeCompare(b.name));
