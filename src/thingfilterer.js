@@ -17,7 +17,7 @@ function sanitize(s) {
 
 
 class ThingFilterer {
-    constructor(config) {
+    constructor() {
         this.app = express();
 
         // set up routes
@@ -154,8 +154,8 @@ class ThingFilterer {
 
     start() {
         console.log('Starting...');
-        this.server = this.app.listen(8888, () => {
-            console.log('Thing Filterer is listening on port 8888');
+        this.server = this.app.listen(80, () => {
+            console.log('Thing Filterer is running!');
         });
     }
 
