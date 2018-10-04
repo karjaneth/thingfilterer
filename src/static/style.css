@@ -1,0 +1,106 @@
+/* center everything in the body */
+
+body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+/* flexify our wrapper element */
+
+#app {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 0px 25px;
+    width: 700px;
+    overflow: hidden;
+}
+
+/* flexify all direct children of wrapper */
+
+#app>* {
+    flex: 0 0 auto;
+}
+
+/* prettify the header text */
+
+#header {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+#error {
+    text-align: center;
+    font-variant: small-caps;
+    font-size: larger;
+    margin-bottom: 10px;
+}
+
+/* prettify the input box */
+
+#query {
+    font-size: large;
+    padding: 10px 10px;
+    margin-bottom: 5px;
+    border: 1px solid black;
+}
+
+/* scroll within the country wrapper div */
+
+#countries {
+    overflow: overlay;
+    flex: 1;
+}
+
+/* prettify the country name elements */
+
+.country {
+    font-size: x-large;
+    padding: 5px 10px;
+    border: 1px solid black;
+    margin-bottom: -1px;
+    cursor: pointer;
+    background-color: rgb(255, 255, 255, 0.5);
+}
+
+.country:hover {
+    background-color: #DDD;
+}
+
+/* kinda ugly way to get our background to look right */
+
+#bg {
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    height: 100vh;
+    width: 100vw;
+    min-height: 800px;
+    z-index: -100;
+    opacity: 0.4;
+    /* more readable than the combined background property */
+    background-image: url(background.svg);
+    background-size: cover;
+    background-origin: border-box;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* stick the license footer to the bottom */
+
+#attributions {
+    position: fixed;
+    bottom: 0px;
+    text-align: center;
+    font-size: smaller;
+    color: #DDD;
+}
+
+#attributions>a {
+    color: inherit;
+    text-decoration: underline;
+}
