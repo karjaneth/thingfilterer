@@ -42,7 +42,7 @@ async function init() {
             // limit filter API call to once every 1/4 second
             query: _.throttle(async function(q) {
                 // call our filter endpoint
-                let response = await get('/filter', { q });
+                let response = await get('filter', { q });
 
                 // process the response
                 if (response.error) {
@@ -70,7 +70,7 @@ async function init() {
                 this.query = s.name;
 
                 // call our details endpoint
-                let response = await get(`/details/${s.code}`);
+                let response = await get(`details/${s.code}`);
 
                 // process the response
                 if (response.error) {
