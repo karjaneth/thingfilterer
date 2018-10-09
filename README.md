@@ -33,13 +33,3 @@ In this example, it will listen on port `8888` of your machine, bound to port
 Navigate to `localhost:port`. You can type part of a country name to narrow down
 the list, and click any country to see more details. The data is pulled from an
 open API, supplemented with some additional data.
-
-## Known Bugs
-
-The data from the API isn't 100% complete, and some pieces of information are
-occasionally missing from the details. In the future it won't attempt to show
-data that it doesn't have.
-
-Cross-browser compatibility should be tested further. I've tested it in Chrome,
-Android Chrome, Firefox, and Edge successfully, but IE was a bust. That may be
-a lost cause given the web technologies in use, but it's worth noting.
